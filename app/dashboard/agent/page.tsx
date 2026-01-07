@@ -121,7 +121,6 @@ export default function AgentDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b bg-card">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
@@ -135,9 +134,7 @@ export default function AgentDashboard() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <Card>
             <CardContent className="pt-6">
@@ -171,7 +168,6 @@ export default function AgentDashboard() {
           </Card>
         </div>
 
-        {/* Filter */}
         <div className="mb-6 flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-muted-foreground" />
@@ -190,23 +186,8 @@ export default function AgentDashboard() {
           </Select>
         </div>
 
-        {/* Tickets List */}
         <div className="space-y-4">
-          {isLoading ? (
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground">Loading tickets...</p>
-              </CardContent>
-            </Card>
-          ) : error ? (
-            <Card>
-              <CardContent className="pt-6">
-                <div className="bg-destructive/10 text-destructive text-sm p-4 rounded border border-destructive/20">
-                  {error}
-                </div>
-              </CardContent>
-            </Card>
-          ) : filteredTickets.length === 0 ? (
+          {filteredTickets.length === 0 ? (
             <Card>
               <CardContent className="pt-6">
                 <p className="text-center text-muted-foreground">No tickets found.</p>
@@ -215,7 +196,11 @@ export default function AgentDashboard() {
           ) : (
             <div className="space-y-6 mb-6 md:mb-8">
               {filteredTickets.map((ticket) => (
-                <Link key={ticket.id} href={`/dashboard/agent/tickets/${ticket.id}`}>
+                <Link
+                  key={ticket.id}
+                  href={`/dashboard/agent/tickets/${ticket.id}`}
+                  className="block"
+                >
                   <Card className="hover:shadow-md transition-shadow cursor-pointer mb-6 last:mb-0">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between">
@@ -237,12 +222,20 @@ export default function AgentDashboard() {
                               </Badge>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{ticket.description}</p>
-                          <p className="text-xs text-muted-foreground">Created {formatDate(ticket.created_at)}</p>
+                          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                            {ticket.description}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Created {formatDate(ticket.created_at)}
+                          </p>
                         </div>
                         <div className="flex gap-2 ml-4">
-                          <Badge className={getPriorityColor(ticket.priority)}>{ticket.priority}</Badge>
-                          <Badge className={getStatusColor(ticket.status)}>{ticket.status.replace("_", " ")}</Badge>
+                          <Badge className={getPriorityColor(ticket.priority)}>
+                            {ticket.priority}
+                          </Badge>
+                          <Badge className={getStatusColor(ticket.status)}>
+                            {ticket.status.replace("_", " ")}
+                          </Badge>
                         </div>
                       </div>
                     </CardContent>
