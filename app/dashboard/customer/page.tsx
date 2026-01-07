@@ -141,7 +141,7 @@ export default function CustomerDashboard() {
             <div className="space-y-4 mb-6 md:mb-8">
               {tickets.map((ticket) => (
                 <Link key={ticket.id} href={`/dashboard/customer/tickets/${ticket.id}`}>
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer mb-6 last:mb-0">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
