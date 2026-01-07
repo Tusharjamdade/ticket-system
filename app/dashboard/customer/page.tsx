@@ -89,7 +89,6 @@ export default function CustomerDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b bg-card">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div>
@@ -103,9 +102,7 @@ export default function CustomerDashboard() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Create Ticket Button */}
         <div className="mb-8">
           <Link href="/dashboard/customer/create-ticket">
             <Button size="lg" className="bg-primary hover:bg-primary/90">
@@ -115,12 +112,13 @@ export default function CustomerDashboard() {
           </Link>
         </div>
 
-        {/* Tickets List */}
         <div className="space-y-4">
           {isLoading ? (
             <Card>
               <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground">Loading your tickets...</p>
+                <p className="text-center text-muted-foreground">
+                  Loading your tickets...
+                </p>
               </CardContent>
             </Card>
           ) : error ? (
@@ -134,31 +132,47 @@ export default function CustomerDashboard() {
           ) : tickets.length === 0 ? (
             <Card>
               <CardContent className="pt-6">
-                <p className="text-center text-muted-foreground">No tickets yet. Create one to get started.</p>
+                <p className="text-center text-muted-foreground">
+                  No tickets yet. Create one to get started.
+                </p>
               </CardContent>
             </Card>
           ) : (
             <div className="space-y-4 mb-6 md:mb-8">
               {tickets.map((ticket) => (
-                <Link key={ticket.id} href={`/dashboard/customer/tickets/${ticket.id}`}>
+                <Link
+                  key={ticket.id}
+                  href={`/dashboard/customer/tickets/${ticket.id}`}
+                  className="block"
+                >
                   <Card className="hover:shadow-md transition-shadow cursor-pointer mb-6 last:mb-0">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-lg">{ticket.title}</h3>
+                            <h3 className="font-semibold text-lg">
+                              {ticket.title}
+                            </h3>
                             {ticket.assigned_agent && (
                               <Badge variant="outline" className="text-xs">
                                 Assigned to {ticket.assigned_agent.full_name}
                               </Badge>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{ticket.description}</p>
-                          <p className="text-xs text-muted-foreground">Created {formatDate(ticket.created_at)}</p>
+                          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                            {ticket.description}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Created {formatDate(ticket.created_at)}
+                          </p>
                         </div>
                         <div className="flex gap-2 ml-4">
-                          <Badge className={getPriorityColor(ticket.priority)}>{ticket.priority}</Badge>
-                          <Badge className={getStatusColor(ticket.status)}>{ticket.status.replace("_", " ")}</Badge>
+                          <Badge className={getPriorityColor(ticket.priority)}>
+                            {ticket.priority}
+                          </Badge>
+                          <Badge className={getStatusColor(ticket.status)}>
+                            {ticket.status.replace("_", " ")}
+                          </Badge>
                         </div>
                       </div>
                     </CardContent>
