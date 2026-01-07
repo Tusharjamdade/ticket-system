@@ -116,7 +116,7 @@ export default function CustomerDashboard() {
         </div>
 
         {/* Tickets List */}
-        <div className="space-y-8">
+        <div className="space-y-4">
           {isLoading ? (
             <Card>
               <CardContent className="pt-6">
@@ -138,7 +138,7 @@ export default function CustomerDashboard() {
               </CardContent>
             </Card>
           ) : (
-            <div className="space-y-6 md:space-y-8">
+            <div className="space-y-4 mb-6 md:mb-8">
               {tickets.map((ticket) => (
                 <Link key={ticket.id} href={`/dashboard/customer/tickets/${ticket.id}`}>
                   <Card className="hover:shadow-md transition-shadow cursor-pointer">
