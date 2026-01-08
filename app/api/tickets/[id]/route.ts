@@ -48,7 +48,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     assigned_agent,
   })
 }
-
 // PATCH - Update ticket (agents only)
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -64,7 +63,11 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   }
 
   // Check if user is agent
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single()
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single()
 
   if (!profile) {
     return NextResponse.json({ error: "Profile not found" }, { status: 404 })
@@ -81,7 +84,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Status or assigned_agent_id required" }, { status: 400 })
   }
 
-  const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() }
+  const updateData: Record<string, unknown> = {
+    updated_at: new Date().toISOString(),
+  }
 
   if (status) {
     if (!["open", "in_progress", "resolved"].includes(status)) {
@@ -94,11 +99,32 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     updateData.assigned_agent_id = assigned_agent_id
   }
 
-  const { data: ticket, error } = await supabase.from("tickets").update(updateData).eq("id", id).select().single()
+  const { data: ticket, error } = await supabase
+    .from("tickets")
+    .update(updateData)
+    .eq("id", id)
+    .select()
+    .single()
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  return NextResponse.json(ticket)
+  // 🔥 IMPORTANT PART — return full agent object
+  let assigned_agent = null
+
+  if (ticket.assigned_agent_id) {
+    const { data: agent } = await supabase
+      .from("profiles")
+      .select("id, full_name")
+      .eq("id", ticket.assigned_agent_id)
+      .single()
+
+    assigned_agent = agent
+  }
+
+  return NextResponse.json({
+    ...ticket,
+    assigned_agent,
+  })
 }

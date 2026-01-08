@@ -40,6 +40,7 @@ export default function TicketDetailPage() {
   const params = useParams()
   const ticketId = params.id as string
   const supabase = createClient()
+  
 
   useEffect(() => {
     const getUser = async () => {
@@ -114,36 +115,43 @@ export default function TicketDetailPage() {
     }
   }
 
-  const handleAssignToMe = async () => {
-    if (!ticket) return
+const handleAssignToMe = async () => {
+  if (!ticket) return
 
-    setIsAssigningLocally(true)
-    setIsSaving(true)
-    try {
-      const response = await fetch(`/api/tickets/${ticketId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          assigned_agent_id: currentUserId,
-        }),
-      })
+  setIsAssigningLocally(true)
+  setIsSaving(true)
 
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || "Failed to assign ticket")
-      }
+  try {
+    const response = await fetch(`/api/tickets/${ticketId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        assigned_agent_id: currentUserId,
+      }),
+    })
 
-      const updatedTicket = await response.json()
-      setTicket(updatedTicket)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to assign ticket")
-      setIsAssigningLocally(false)
-    } finally {
-      setIsSaving(false)
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data.error || "Failed to assign ticket")
     }
+
+    const updatedTicket = await response.json()
+
+    // 🔥 Update ticket + assignment state
+    setTicket(updatedTicket)
+
+    // 🎯 Stop showing processing state immediately
+    setIsAssigningLocally(false)
+
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Failed to assign ticket")
+
+    // allow retry
+    setIsAssigningLocally(false)
+  } finally {
+    setIsSaving(false)
   }
+}
 
   const getStatusColor = (status: string) => {
     switch (status) {
