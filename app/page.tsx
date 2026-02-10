@@ -17,7 +17,7 @@ export default async function HomePage() {
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold">Ticket System</h1>
-            <p className="text-lg text-muted-foreground">Professional customer support ticket management platform</p>
+            <p className="text-lg text-muted-foreground">Customer support ticket management platform</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
