@@ -5,6 +5,7 @@ pipeline {
     stages {
         stage("Hello"){
             steps{
+                echo "Hi there this is Jenkinsfile test!"
                 script{
                     hello()
                 }
