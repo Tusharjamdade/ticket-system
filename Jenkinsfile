@@ -3,31 +3,35 @@ pipeline {
     agent { label "ec2-agent" }
 
     stages {
-        stage("Hello"){
-            steps{
+        stage("Hello") {
+            steps {
                 echo "Hi there this is Jenkinsfile test!"
-                script{
+                script {
                     hello()
                 }
             }
         }
+
         stage('Code') {
             steps {
-                script{
+                script {
                     clone()
                 }
             }
         }
+
         stage('Running Container') {
             steps {
                 echo "Running Container..."
-                    withCredentials([file(credentialsId: 'ticket-system-env', variable: 'ENV_FILE')]) {
+                withCredentials([file(credentialsId: 'ticket-system-env', variable: 'ENV_FILE')]) {
                     sh '''
                     cp $ENV_FILE .env
                     docker compose down || true
                     docker compose up -d --build
                     '''
+                }
             }
         }
     }
 }
+
